@@ -1,0 +1,36 @@
+name: arcade
+description: "PiCo (Pixel Console)."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.1
+  
+dependencies:
+  flutter:
+    sdk: flutter
+  flame: ^1.18.0
+  flame_audio: ^2.10.0   # 🔥 sound effects
+  flame_tiled: ^1.20.2
+
+  flutter_riverpod: ^2.5.1   # state management
+  go_router: ^14.2.0         # navigation
+
+  shared_preferences: ^2.2.3  # local scores
+    
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+    
+  flutter_lints: ^6.0.0
+  
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/audio/
+    - assets/sprites/
