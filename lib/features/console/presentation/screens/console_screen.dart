@@ -107,7 +107,13 @@ class _ConsoleScreenState extends ConsumerState<ConsoleScreen> {
                       SizedBox(
                         width: size * 0.6,
                         height: size * 0.6,
-                        child: StartButton(onStart: _startGame),
+                        child: StartButton(
+                          onStart: () {
+                            if (flameGame is SnakeGame) {
+                              (flameGame as SnakeGame).resetGame();
+                            }
+                          },
+                        ),
                       ),
                     ],
                   );
@@ -140,9 +146,9 @@ class _ConsoleScreenState extends ConsumerState<ConsoleScreen> {
     return null;
   }
 
-  void _startGame() {
+  /* void _startGame() {
     flameGame.resumeEngine();
-  }
+  } */
 
   void _togglePause() {
     if (flameGame.paused) {

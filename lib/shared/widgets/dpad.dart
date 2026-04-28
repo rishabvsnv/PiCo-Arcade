@@ -15,25 +15,7 @@ class DPad extends StatelessWidget {
   });
 
   Widget _btn(VoidCallback onTap, IconData icon, double size) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          color: const Color(0xFFFF7A00),
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.4),
-              offset: const Offset(3, 4),
-              blurRadius: 6,
-            ),
-          ],
-        ),
-        child: Icon(icon, color: Colors.white, size: size * 0.5),
-      ),
-    );
+    return _PressableButton(size: size, icon: icon, onPressed: onTap);
   }
 
   @override
@@ -67,6 +49,71 @@ class DPad extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _PressableButton extends StatefulWidget {
+  final double size;
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  const _PressableButton({
+    required this.size,
+    required this.icon,
+    required this.onPressed,
+  });
+
+  @override
+  State<_PressableButton> createState() => _PressableButtonState();
+}
+
+class _PressableButtonState extends State<_PressableButton> {
+  bool isPressed = false;
+
+  Future<void> _startHolding() async {
+    while (isPressed) {
+      widget.onPressed();
+      await Future.delayed(const Duration(milliseconds: 120));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) {
+        setState(() => isPressed = true);
+        widget.onPressed(); // immediate response
+        _startHolding(); // 🔥 continuous movement
+      },
+      onTapUp: (_) => setState(() => isPressed = false),
+      onTapCancel: () => setState(() => isPressed = false),
+
+      child: AnimatedScale(
+        scale: isPressed ? 0.9 : 1.0,
+        duration: const Duration(milliseconds: 100),
+
+        child: Container(
+          width: widget.size,
+          height: widget.size,
+          decoration: BoxDecoration(
+            color: const Color(0xFFFF7A00),
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.4),
+                offset: const Offset(3, 4),
+                blurRadius: 6,
+              ),
+            ],
+          ),
+          child: Icon(
+            widget.icon,
+            color: Colors.white,
+            size: widget.size * 0.5,
+          ),
+        ),
+      ),
     );
   }
 }
